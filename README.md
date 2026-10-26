@@ -4,7 +4,7 @@ Primera versión de una PWA en español para Android: biblioteca personal de tab
 
 [Abrir la app](https://seis-cuerdas.pepe-lag-gar-3da.workers.dev/) · [Repositorio](https://github.com/pplagarto/guitarpepe)
 
-Para obtener el código: `git clone https://github.com/pplagarto/guitarpepe.git`. La publicación actual se realiza desde Cloudflare; subir cambios al repositorio no actualiza automáticamente la app publicada.
+Para obtener el código: `git clone https://github.com/pplagarto/guitarpepe.git`. **GitHub es la fuente de la app publicada.** Cloudflare Workers Builds está conectado al repositorio y publica automáticamente cada push a `codex/seis-cuerdas`, después de pasar las pruebas y generar los archivos estáticos.
 
 ## Probar en este Mac
 
@@ -62,9 +62,19 @@ Publicada el 25 de octubre de 2026 en Cloudflare Workers Static Assets:
 
 **https://seis-cuerdas.pepe-lag-gar-3da.workers.dev/**
 
-Worker: `seis-cuerdas`. La publicación inicial se realizó subiendo los nueve archivos de `dist/` mediante el panel autenticado de Cloudflare. El panel confirmó la versión `cc71f80f` como `Ready`, al 100 %. La dirección de la app es pública; las canciones se conservan solo en el navegador de cada dispositivo.
+Worker: `seis-cuerdas`. La dirección de la app es pública; las canciones se conservan solo en el navegador de cada dispositivo. La biblioteca personal y los respaldos no se guardan en GitHub.
 
-Para futuras actualizaciones por el panel, abre **Workers & Pages → seis-cuerdas → New deployment** y sube la carpeta `dist/` después del build. También se incluye Wrangler como dependencia de desarrollo y `wrangler.jsonc` con el nombre de este mismo Worker. Para publicar por CLI, ejecuta `npx wrangler login` y después `npm run deploy`; no se configuraron credenciales de CLI durante la publicación inicial.
+### Flujo de publicación desde GitHub
+
+1. Modifica el código en una copia del repositorio y ejecuta `npm test` y `npm run build`.
+2. Guarda los cambios en un commit y envíalos a `origin/codex/seis-cuerdas`.
+3. Cloudflare recibe el push, instala las dependencias del lockfile y ejecuta `npm test && npm run build`.
+4. Si todo pasa, ejecuta `npx wrangler deploy` con la configuración versionada en `wrangler.jsonc` y actualiza la misma URL. Si falla una prueba o la compilación, ese cambio no se publica.
+5. Verifica el resultado en **Cloudflare → Workers & Pages → seis-cuerdas → Deployments** y comprueba el commit que aparece en el despliegue.
+
+Configuración de Workers Builds: repositorio `pplagarto/guitarpepe`, rama de producción `codex/seis-cuerdas`, directorio raíz `/`, builds habilitados y previews de otras ramas deshabilitados. La credencial de despliegue la gestiona Cloudflare; no se guarda en el repositorio. `.node-version` fija la versión mayor de Node para la compilación.
+
+El flujo normal es siempre **GitHub → pruebas → build → Cloudflare**. No subir carpetas manualmente ni publicar desde una copia local con Wrangler: eso rompería la relación entre el código de GitHub y la versión pública. El script `deploy` queda disponible como herramienta técnica, pero la publicación normal la ejecuta Cloudflare desde un commit de GitHub.
 
 El intento previo con Sites no creó ningún Site porque ese servicio no estaba habilitado en la cuenta.
 
