@@ -1,0 +1,17 @@
+{
+  "id": "./",
+  "name": "Seis Cuerdas — Tablaturas y afinador",
+  "short_name": "Seis Cuerdas",
+  "description": "Tus tablaturas y acordes revisados, con capo y afinador por micrófono.",
+  "lang": "es-MX",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#191c19",
+  "theme_color": "#191c19",
+  "icons": [
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "categories": ["music", "utilities"]
+}
